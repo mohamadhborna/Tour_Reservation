@@ -7,11 +7,11 @@ namespace Tour.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/[controller]")]
-    public class PackagesController : Controller
+    public class PackageController : Controller
     {
         private readonly IPackageService _packageService;
 
-        public PackagesController(IPackageService packageService)
+        public PackageController(IPackageService packageService)
         {
             _packageService = packageService;
         }
