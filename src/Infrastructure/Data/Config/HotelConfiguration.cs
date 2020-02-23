@@ -11,6 +11,9 @@ namespace Tour.Infrastructure.Data.Config
             builder.ToTable(nameof(Hotel));
 
             builder.HasKey(h => h.Id);
+
+            builder.Property(h => h.Price)
+                    .HasColumnType("decimal(18, 4)");
         }
     }
 }

@@ -41,7 +41,10 @@ namespace Api
             services.AddScoped<IHotelInfoService, HotelInfoService>();
             services.AddScoped<IHotelInfoRepository, HotelInfoRepository>();
 
-            ConfigureInMemoryDatabase(services);
+            // Uncomment the following line for development and test
+            // ConfigureInMemoryDatabase(services);
+
+            ConfigureSqlServer(services);
             ConfigureSwagger(services);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -60,6 +63,13 @@ namespace Api
             services.AddDbContext<PackageContext>(options =>
             {
                 options.UseInMemoryDatabase("tour");
+            });
+        }
+
+        public void ConfigureSqlServer(IServiceCollection services)
+        {
+            services.AddDbContext<PackageContext>(options => {
+                options.UseSqlServer(Configuration["ConnectionString:DefaultConnection"]);
             });
         }
 
