@@ -4,12 +4,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Tour.Infrastructure.Data.Config
 {
-    public class CityConfiguration : IEntityTypeConfiguration<City>
+    public class CityConfiguration : BaseConfiguration<City>
     {
-        public void Configure(EntityTypeBuilder<City> builder)
+        public override void Configure(EntityTypeBuilder<City> builder)
         {
-            builder.ToTable(nameof(City));
-            builder.HasKey(h => h.Id);
+            base.Configure(builder);
+            builder.HasIndex(e => e.Title)
+                .IsUnique()
+                .HasName($"UX_{nameof(City)}_{nameof(City.Title)}");
+            builder.Property (e => e.Title)
+                .IsRequired() 
+                .HasMaxLength(40);
         }
     }
 }

@@ -4,13 +4,25 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Tour.Infrastructure.Data.Config
 {
-    public class HotelConfiguration : IEntityTypeConfiguration<Hotel>
+    public class HotelConfiguration : BaseConfiguration<Hotel>
     {
-        public void Configure(EntityTypeBuilder<Hotel> builder)
+        public override void Configure(EntityTypeBuilder<Hotel> builder)
         {
-            builder.ToTable(nameof(Hotel));
+            base.Configure(builder);
+            builder.Property (e => e.Price)
+                .IsRequired();
+            builder.HasOne(e => e.HotelInformation)
+                .WithMany()
+                .HasForeignKey(e => e.HotelInfoId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName($"FK_{nameof(Hotel)}_{nameof(Hotel.HotelInfoId)}");
+            builder.HasOne<Package>()
+                .WithMany(e => e.Hotels)
+                .HasForeignKey(e => e.PackageId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName($"FK_{nameof(Hotel)}_{nameof(Hotel.PackageId)}");  
 
-            builder.HasKey(h => h.Id);
+
         }
     }
 }
