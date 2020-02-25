@@ -7,11 +7,11 @@ namespace Tour.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/[controller]")]
-    public class CitiesController : Controller
+    public class CityController : Controller
     {
         private readonly ICityService _cityService;
 
-        public CitiesController(ICityService cityService)
+        public CityController(ICityService cityService)
         {
             _cityService = cityService;
         }
