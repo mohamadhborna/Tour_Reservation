@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssmblyName>Tour.Domain</AssmblyName>
+    <LangVersion>7.3</LangVersoin>
   </PropertyGroup>
 
 </Project>
