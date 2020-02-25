@@ -259,3 +259,6 @@ paket-files/
 
 # Development setting
 appsettings.Development.json
+
+# global.json
+global.json
