@@ -1,45 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Tour.Domain.Interfaces.Service;
+using Tour.Api.Controllers.Core;
+using Tour.Domain.Interfaces.Service.Core;
 using Tour.Domain.Entities;
 
 namespace Tour.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/[controller]")]
-    public class TransportationInfoController : Controller
+    public class TransportationInfosController : BaseController<IService<TransportationInfo>, TransportationInfo>
     {
-        private readonly ITransportationInfoService _transportationInfoService;
-
-        public TransportationInfoController(ITransportationInfoService transportationInfo)
+        public TransportationInfosController(IService<TransportationInfo> transportationInfo) : base(transportationInfo)
         {
-            _transportationInfoService = transportationInfo;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetCities()
-        {
-            var hotelInfos = await _transportationInfoService.Get();
-            return Ok(hotelInfos);
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddTransportationInfo(TransportationInfo transportationInfo)
-        {
-            await _transportationInfoService.Create(transportationInfo);
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTransportationInfo(int id)
-        {
-            var deletedTransportationInfo = await _transportationInfoService.Delete(id);
-            if (deletedTransportationInfo == null)
-            {
-                return NotFound();
-            }
-            return Ok();
         }
     }
 }

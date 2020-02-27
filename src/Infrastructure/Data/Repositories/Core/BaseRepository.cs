@@ -2,12 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Tour.Domain.Entities;
-using Tour.Domain.Interfaces;
+using Tour.Domain.Interfaces.Repository.Core;
 
 namespace Tour.Infrastructure.Data
 {
     public class BaseRepository<TEntity, TContext> : IRepository<TEntity>
-        where TEntity : BaseEntity, IAggregateRoot
+        where TEntity : BaseEntity
         where TContext : DbContext
     {
         private readonly TContext _context;

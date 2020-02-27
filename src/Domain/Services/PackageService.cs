@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Tour.Domain.Interfaces;
+using Tour.Domain.Interfaces.Service;
 using Tour.Domain.Entities;
 
 namespace Tour.Domain.Services

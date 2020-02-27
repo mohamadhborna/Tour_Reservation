@@ -13,10 +13,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Tour.Domain.Interfaces;
 using Tour.Domain.Interfaces.Service;
+using Tour.Domain.Interfaces.Service.Core;
 using Tour.Domain.Services;
 using Tour.Infrastructure;
 using Tour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Tour.Domain.Entities;
+using Tour.Domain.Interfaces.Repository.Core;
 
 namespace Api
 {
@@ -32,14 +35,15 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IPackageService, PackageService>();
+            services.AddScoped<IRepository<City>, BaseRepository<City , PackageContext>>();
+            services.AddScoped<IRepository<HotelInfo>, BaseRepository<HotelInfo , PackageContext>>();
+            services.AddScoped<IRepository<TransportationInfo>, BaseRepository<TransportationInfo , PackageContext>>();
             services.AddScoped<IPackageRepository, PackageRepository>();
-            services.AddScoped<ICityRepository, CityRepository>();
-            services.AddScoped<ICityService, CityService>();
-            services.AddScoped<ITransportationInfoService, TransportationInfoService>();
-            services.AddScoped<ITransportationInfoRepository, TransportationInfoRepository>();
-            services.AddScoped<IHotelInfoService, HotelInfoService>();
-            services.AddScoped<IHotelInfoRepository, HotelInfoRepository>();
+
+            services.AddScoped<IPackageService, PackageService>();
+            services.AddScoped<IService<City>, BaseService<City , IRepository<City>>>();
+            services.AddScoped<IService<HotelInfo>, BaseService<HotelInfo , IRepository<HotelInfo>>>();
+            services.AddScoped<IService<TransportationInfo>, BaseService<TransportationInfo , IRepository<TransportationInfo>>>();
 
             ConfigureInMemoryDatabase(services);
             ConfigureSwagger(services);

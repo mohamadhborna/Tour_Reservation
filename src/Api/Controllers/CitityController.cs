@@ -7,9 +7,9 @@ namespace Tour.Api.Controllers
 {
     [ApiController]
     [Route("/api/v1/[controller]")]
-    public class HotelInfosController : BaseController<IService<HotelInfo>, HotelInfo>
+    public class CitiesController : BaseController<IService<City> , City>
     {
-        public HotelInfosController(IService<HotelInfo> service) : base(service)
+        public CitiesController(IService<City> service) : base(service)
         {
         }
     }
