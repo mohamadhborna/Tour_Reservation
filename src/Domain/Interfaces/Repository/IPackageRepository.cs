@@ -1,3 +1,4 @@
+using Tour.Domain.Interfaces.Repository.Core;
 using Tour.Domain.Entities;
 
 namespace Tour.Domain.Interfaces
