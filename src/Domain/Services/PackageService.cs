@@ -16,22 +16,22 @@ namespace Tour.Domain.Services
         }
 
         // Add service methods you need in other classes
-        public async Task Create(Package package)
+        public async Task AddAsync(Package package)
         {
-            await _packageRepository.CreateAsync(package);
+            await _packageRepository.AddAsync(package);
         }
 
-        public async Task<IReadOnlyList<Package>> Get()
+        public async Task<IEnumerable<Package>> GetAllAsync()
         {
             return await _packageRepository.GetAllAsync();
         }
 
-        public async Task Update(Package package)
+        public async Task UpdateAsync(Package package)
         {
             await _packageRepository.UpdateAsync(package);
         }
 
-        public async Task<Package> Delete(long id)
+        public async Task<Package> DeleteAsync(long id)
         {
             return await _packageRepository.DeleteAsync(id);
         }

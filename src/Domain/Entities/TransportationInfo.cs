@@ -7,7 +7,7 @@ namespace Tour.Domain.Entities
         Bus, 
         Airplain,
     }
-    public class TransportationInfo : BaseEntity
+    public class TransportationInfo : EntityBase
     {
         public string CompanyName { get; set; }
         public TransportationType Type { get; set; }

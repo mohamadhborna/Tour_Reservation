@@ -5,7 +5,7 @@ using Tour.Domain.Interfaces.Service.Core;
 
 namespace Tour.Domain.Interfaces.Service
 {
-    public interface IPackageService : IService<Package>
+    public interface IPackageService : ICrudService<Package>
     {
     }
 }

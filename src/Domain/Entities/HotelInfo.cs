@@ -2,7 +2,7 @@ using Tour.Domain.Interfaces;
 
 namespace Tour.Domain.Entities
 {
-    public class HotelInfo : BaseEntity
+    public class HotelInfo : EntityBase
     {
         public string Name { get; set; }
         public int Stars { get; set; }

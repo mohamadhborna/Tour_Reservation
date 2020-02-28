@@ -41,9 +41,9 @@ namespace Api
             services.AddScoped<IPackageRepository, PackageRepository>();
 
             services.AddScoped<IPackageService, PackageService>();
-            services.AddScoped<IService<City>, BaseService<City , IRepository<City>>>();
-            services.AddScoped<IService<HotelInfo>, BaseService<HotelInfo , IRepository<HotelInfo>>>();
-            services.AddScoped<IService<TransportationInfo>, BaseService<TransportationInfo , IRepository<TransportationInfo>>>();
+            services.AddScoped<ICrudService<City>, CrudServiceBase<City , IRepository<City>>>();
+            services.AddScoped<ICrudService<HotelInfo>, CrudServiceBase<HotelInfo , IRepository<HotelInfo>>>();
+            services.AddScoped<ICrudService<TransportationInfo>, CrudServiceBase<TransportationInfo , IRepository<TransportationInfo>>>();
 
             ConfigureInMemoryDatabase(services);
             ConfigureSwagger(services);

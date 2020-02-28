@@ -4,10 +4,10 @@ using Tour.Domain.Entities;
 
 namespace Tour.Domain.Interfaces.Repository.Core
 {
-    public interface IRepository<T> where T : BaseEntity
+    public interface IRepository<T> where T : EntityBase
     {
-        Task CreateAsync(T entity);
-        Task<IReadOnlyList<T>> GetAllAsync();
+        Task AddAsync(T entity);
+        Task<IEnumerable<T>> GetAllAsync();
         Task UpdateAsync(T entity);
         Task<T> DeleteAsync(long id);
     }

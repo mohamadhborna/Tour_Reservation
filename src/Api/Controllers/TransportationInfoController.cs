@@ -5,11 +5,9 @@ using Tour.Domain.Entities;
 
 namespace Tour.Api.Controllers
 {
-    [ApiController]
-    [Route("/api/v1/[controller]")]
-    public class TransportationInfosController : BaseController<IService<TransportationInfo>, TransportationInfo>
+    public class TransportationInfoController : CrudControllerBase<TransportationInfo, ICrudService<TransportationInfo>>
     {
-        public TransportationInfosController(IService<TransportationInfo> transportationInfo) : base(transportationInfo)
+        public TransportationInfoController(ICrudService<TransportationInfo> transportationInfo) : base(transportationInfo)
         {
         }
     }
