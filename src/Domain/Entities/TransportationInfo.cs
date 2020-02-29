@@ -2,9 +2,14 @@ using Tour.Domain.Interfaces;
 
 namespace Tour.Domain.Entities
 {
-    public class TransportationInfo : BaseEntity, IAggregateRoot
+    public enum TransportationType{
+        Train, 
+        Bus, 
+        Airplain,
+    }
+    public class TransportationInfo : EntityBase
     {
         public string CompanyName { get; set; }
-        public int Type { get; set; }
+        public TransportationType Type { get; set; }
     }
 }

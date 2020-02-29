@@ -2,12 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Tour.Domain.Entities;
-using Tour.Domain.Interfaces;
+using Tour.Domain.Interfaces.Repository.Core;
 
 namespace Tour.Infrastructure.Data
 {
     public class BaseRepository<TEntity, TContext> : IRepository<TEntity>
-        where TEntity : BaseEntity, IAggregateRoot
+        where TEntity : EntityBase
         where TContext : DbContext
     {
         private readonly TContext _context;
@@ -17,18 +17,19 @@ namespace Tour.Infrastructure.Data
             _context = context;
         }
 
-        public async Task CreateAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await _context.Set<TEntity>().AddAsync(entity);
             await _context.SaveChangesAsync();
         }
-        public async Task<IReadOnlyList<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _context.Set<TEntity>().ToListAsync();
         }
         public async Task UpdateAsync(TEntity entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            _context.Update(entity);
+
             await _context.SaveChangesAsync();
         }
         public async Task<TEntity> DeleteAsync(long id)
