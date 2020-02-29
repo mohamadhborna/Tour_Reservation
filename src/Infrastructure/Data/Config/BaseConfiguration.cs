@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Tour.Infrastructure.Data.Config
 {
     public class BaseConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
-    where TEntity : BaseEntity
+    where TEntity : EntityBase
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
