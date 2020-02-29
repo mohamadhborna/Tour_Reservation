@@ -4,7 +4,7 @@ namespace Tour.Domain.Entities
 {
     public class HotelInfo : EntityBase
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         public int Stars { get; set; }
         public float Rate { get; set; }
         public City city { get; set; }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Tour.Infrastructure.Data
 {
@@ -10,7 +11,6 @@ namespace Tour.Infrastructure.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Package> Packages { get; set; }
         public PackageContext(DbContextOptions<PackageContext> options) : base(options) { }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

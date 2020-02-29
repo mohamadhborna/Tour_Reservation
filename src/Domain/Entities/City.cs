@@ -4,6 +4,6 @@ namespace Tour.Domain.Entities
 {
     public class City : EntityBase
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
     }
 }
