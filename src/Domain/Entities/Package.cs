@@ -4,11 +4,13 @@ using Tour.Domain.Interfaces;
 
 namespace Tour.Domain.Entities
 {
-    public class Package : BaseEntity, IAggregateRoot
+    public class Package : EntityBase, IAggregateRoot
     {
         public string Title { get; set; }
         public City OriginCity { get; set; }
+        public long OriginCityId { get; set; }
         public City DestinationCity { get; set; }
+        public long DestinationCityId { get; set; }
         public string SupportPhone { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

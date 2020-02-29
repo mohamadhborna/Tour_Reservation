@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tour.Infrastructure.Data;
 
-namespace Infrastructure.EntityFramework.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PackageContext))]
-    partial class PackageContextModelSnapshot : ModelSnapshot
+    [Migration("20200229163403_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +27,7 @@ namespace Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
@@ -38,13 +40,15 @@ namespace Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("HotelInfoId");
+                    b.Property<long>("HotelInfoId");
 
-                    b.Property<long?>("PackageId");
+                    b.Property<long>("PackageId");
 
                     b.Property<decimal>("Price");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HotelInfoId");
 
                     b.HasIndex("PackageId");
 
@@ -57,13 +61,19 @@ namespace Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Location");
 
                     b.Property<float>("Rate");
 
                     b.Property<int>("Stars");
 
+                    b.Property<string>("Title");
+
+                    b.Property<long?>("cityId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("cityId");
 
                     b.ToTable("HotelInfos");
                 });
@@ -74,11 +84,11 @@ namespace Infrastructure.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("DestinationCityId");
+                    b.Property<long>("DestinationCityId");
 
                     b.Property<DateTime>("EndDate");
 
-                    b.Property<long?>("OriginCityId");
+                    b.Property<long>("OriginCityId");
 
                     b.Property<DateTime>("StartDate");
 
@@ -103,15 +113,17 @@ namespace Infrastructure.EntityFramework.Migrations
 
                     b.Property<DateTime>("FromDate");
 
-                    b.Property<long?>("PackageId");
+                    b.Property<long>("PackageId");
 
                     b.Property<DateTime>("ToDate");
 
-                    b.Property<int>("TransportationInfoId");
+                    b.Property<long>("TransportationInfoId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PackageId");
+
+                    b.HasIndex("TransportationInfoId");
 
                     b.ToTable("Transportation");
                 });
@@ -133,27 +145,48 @@ namespace Infrastructure.EntityFramework.Migrations
 
             modelBuilder.Entity("Tour.Domain.Entities.Hotel", b =>
                 {
+                    b.HasOne("Tour.Domain.Entities.HotelInfo", "HotelInformation")
+                        .WithMany()
+                        .HasForeignKey("HotelInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Tour.Domain.Entities.Package")
                         .WithMany("Hotels")
-                        .HasForeignKey("PackageId");
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Tour.Domain.Entities.HotelInfo", b =>
+                {
+                    b.HasOne("Tour.Domain.Entities.City", "city")
+                        .WithMany()
+                        .HasForeignKey("cityId");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Package", b =>
                 {
                     b.HasOne("Tour.Domain.Entities.City", "DestinationCity")
                         .WithMany()
-                        .HasForeignKey("DestinationCityId");
+                        .HasForeignKey("DestinationCityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Tour.Domain.Entities.City", "OriginCity")
                         .WithMany()
-                        .HasForeignKey("OriginCityId");
+                        .HasForeignKey("OriginCityId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Transportation", b =>
                 {
                     b.HasOne("Tour.Domain.Entities.Package")
                         .WithMany("Transportations")
-                        .HasForeignKey("PackageId");
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Tour.Domain.Entities.TransportationInfo", "TransportationInformation")
+                        .WithMany()
+                        .HasForeignKey("TransportationInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

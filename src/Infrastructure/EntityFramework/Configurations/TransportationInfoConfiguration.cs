@@ -4,13 +4,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Tour.Infrastructure.Data.Config
 {
-    public class TransformationInfoConfiguration : IEntityTypeConfiguration<TransportationInfo>
+    public class TransportationInfoConfiguration : BaseConfiguration<TransportationInfo>
     {
-        public void Configure(EntityTypeBuilder<TransportationInfo> builder)
+        public override void Configure(EntityTypeBuilder<TransportationInfo> builder)
         {
-            builder.ToTable(nameof(TransportationInfo));
+            base.Configure(builder);
+            builder.Property(e => e.CompanyName)
+                .HasMaxLength(40)
+                .IsRequired();
+            builder.HasIndex(e => e.CompanyName)
+                .IsUnique()
+                .HasName($"UX_{nameof(TransportationInfo)}_{nameof(TransportationInfo.CompanyName)}");
+            builder.Property(e => e.Type)
+                .IsRequired();
 
-            builder.HasKey(h => h.Id);
+            
         }
     }
 }
