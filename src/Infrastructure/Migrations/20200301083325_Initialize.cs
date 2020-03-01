@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true)
+                    Title = table.Column<string>(maxLength: 40, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,7 +27,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CompanyName = table.Column<string>(nullable: true),
+                    CompanyName = table.Column<string>(maxLength: 40, nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -41,9 +41,9 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
-                    Stars = table.Column<int>(nullable: false),
-                    Rate = table.Column<float>(nullable: false),
+                    Title = table.Column<string>(maxLength: 40, nullable: false),
+                    Stars = table.Column<int>(nullable: false, defaultValue: 0),
+                    Rate = table.Column<decimal>(type: "decimal(4, 2)", nullable: false, defaultValue: 0m),
                     cityId = table.Column<long>(nullable: true),
                     Location = table.Column<string>(nullable: true)
                 },
@@ -64,7 +64,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(maxLength: 40, nullable: false),
                     OriginCityId = table.Column<long>(nullable: false),
                     DestinationCityId = table.Column<long>(nullable: false),
                     SupportPhone = table.Column<string>(nullable: true),
@@ -75,17 +75,17 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Packages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Packages_Cities_DestinationCityId",
+                        name: "FK_Package_DestinationCityId",
                         column: x => x.DestinationCityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Packages_Cities_OriginCityId",
+                        name: "FK_Package_OriginCityId",
                         column: x => x.OriginCityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,17 +102,17 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Hotel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Hotel_HotelInfos_HotelInfoId",
+                        name: "FK_Hotel_HotelInfoId",
                         column: x => x.HotelInfoId,
                         principalTable: "HotelInfos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Hotel_Packages_PackageId",
+                        name: "FK_Hotel_PackageId",
                         column: x => x.PackageId,
                         principalTable: "Packages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,18 +130,24 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Transportation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transportation_Packages_PackageId",
+                        name: "FK_Transportation_PackageId",
                         column: x => x.PackageId,
                         principalTable: "Packages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Transportation_TransportationInfos_TransportationInfoId",
+                        name: "FK_Transportation_TransportationInfoId",
                         column: x => x.TransportationInfoId,
                         principalTable: "TransportationInfos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "UX_City_Title",
+                table: "Cities",
+                column: "Title",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hotel_HotelInfoId",
@@ -152,6 +158,12 @@ namespace Infrastructure.Migrations
                 name: "IX_Hotel_PackageId",
                 table: "Hotel",
                 column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_HotelInfo_Title",
+                table: "HotelInfos",
+                column: "Title",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_HotelInfos_cityId",
@@ -169,6 +181,12 @@ namespace Infrastructure.Migrations
                 column: "OriginCityId");
 
             migrationBuilder.CreateIndex(
+                name: "UX_Package_Title",
+                table: "Packages",
+                column: "Title",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transportation_PackageId",
                 table: "Transportation",
                 column: "PackageId");
@@ -177,6 +195,12 @@ namespace Infrastructure.Migrations
                 name: "IX_Transportation_TransportationInfoId",
                 table: "Transportation",
                 column: "TransportationInfoId");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_TransportationInfo_CompanyName",
+                table: "TransportationInfos",
+                column: "CompanyName",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

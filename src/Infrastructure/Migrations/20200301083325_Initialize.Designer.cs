@@ -10,8 +10,8 @@ using Tour.Infrastructure.Data;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PackageContext))]
-    [Migration("20200229163403_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200301083325_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,9 +27,15 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(40);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique()
+                        .HasName("UX_City_Title");
 
                     b.ToTable("Cities");
                 });
@@ -63,15 +69,27 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Location");
 
-                    b.Property<float>("Rate");
+                    b.Property<decimal>("Rate")
+                        .ValueGeneratedOnAdd()
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 38, scale: 17)))
+                        .HasColumnType("decimal(4, 2)")
+                        .HasDefaultValue(0m);
 
-                    b.Property<int>("Stars");
+                    b.Property<int>("Stars")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(40);
 
                     b.Property<long?>("cityId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique()
+                        .HasName("UX_HotelInfo_Title");
 
                     b.HasIndex("cityId");
 
@@ -94,13 +112,19 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("SupportPhone");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(40);
 
                     b.HasKey("Id");
 
                     b.HasIndex("DestinationCityId");
 
                     b.HasIndex("OriginCityId");
+
+                    b.HasIndex("Title")
+                        .IsUnique()
+                        .HasName("UX_Package_Title");
 
                     b.ToTable("Packages");
                 });
@@ -134,11 +158,17 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CompanyName");
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(40);
 
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyName")
+                        .IsUnique()
+                        .HasName("UX_TransportationInfo_CompanyName");
 
                     b.ToTable("TransportationInfos");
                 });
@@ -148,12 +178,14 @@ namespace Infrastructure.Migrations
                     b.HasOne("Tour.Domain.Entities.HotelInfo", "HotelInformation")
                         .WithMany()
                         .HasForeignKey("HotelInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Hotel_HotelInfoId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Tour.Domain.Entities.Package")
                         .WithMany("Hotels")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Hotel_PackageId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.HotelInfo", b =>
@@ -168,12 +200,14 @@ namespace Infrastructure.Migrations
                     b.HasOne("Tour.Domain.Entities.City", "DestinationCity")
                         .WithMany()
                         .HasForeignKey("DestinationCityId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Package_DestinationCityId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Tour.Domain.Entities.City", "OriginCity")
                         .WithMany()
                         .HasForeignKey("OriginCityId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Package_OriginCityId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Transportation", b =>
@@ -181,12 +215,14 @@ namespace Infrastructure.Migrations
                     b.HasOne("Tour.Domain.Entities.Package")
                         .WithMany("Transportations")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Transportation_PackageId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Tour.Domain.Entities.TransportationInfo", "TransportationInformation")
                         .WithMany()
                         .HasForeignKey("TransportationInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_Transportation_TransportationInfoId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

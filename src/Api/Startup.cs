@@ -20,6 +20,9 @@ using Tour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
 using Tour.Domain.Interfaces.Repository.Core;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
+
 
 namespace Api
 {
@@ -75,6 +78,15 @@ namespace Api
             services.AddDbContext<PackageContext>(options => {
                 options.UseSqlServer(Configuration["ConnectionString:DefaultConnection"]);
             });
+            services.AddDbContext<PackageContext>(options => {options.ConfigureWarnings(warnings => 
+                 warnings.Default(WarningBehavior.Ignore)
+                    .Log(CoreEventId.IncludeIgnoredWarning)
+                    .Throw(RelationalEventId.QueryClientEvaluationWarning));
+            });
+            services.AddDbContext<PackageContext>(options => {options.EnableDetailedErrors();});
+            services.AddDbContext<PackageContext>(options => {options.EnableSensitiveDataLogging();});
+            services.AddDbContext<PackageContext>(options => {options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);});
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
