@@ -10,8 +10,8 @@ using Tour.Infrastructure.Data;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PackageContext))]
-    [Migration("20200301083325_Initialize")]
-    partial class Initialize
+    [Migration("20200301150238_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,7 +37,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasName("UX_City_Title");
 
-                    b.ToTable("Cities");
+                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Hotel", b =>
@@ -50,7 +50,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<long>("PackageId");
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(6,1)");
 
                     b.HasKey("Id");
 
@@ -93,7 +94,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("cityId");
 
-                    b.ToTable("HotelInfos");
+                    b.ToTable("HotelInfo");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Package", b =>
@@ -126,7 +127,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasName("UX_Package_Title");
 
-                    b.ToTable("Packages");
+                    b.ToTable("Package");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Transportation", b =>
@@ -170,7 +171,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasName("UX_TransportationInfo_CompanyName");
 
-                    b.ToTable("TransportationInfos");
+                    b.ToTable("TransportationInfo");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Hotel", b =>

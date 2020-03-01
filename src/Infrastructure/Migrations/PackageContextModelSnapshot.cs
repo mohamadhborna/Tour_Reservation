@@ -35,7 +35,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasName("UX_City_Title");
 
-                    b.ToTable("Cities");
+                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Hotel", b =>
@@ -92,7 +92,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("cityId");
 
-                    b.ToTable("HotelInfos");
+                    b.ToTable("HotelInfo");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Package", b =>
@@ -125,7 +125,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasName("UX_Package_Title");
 
-                    b.ToTable("Packages");
+                    b.ToTable("Package");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Transportation", b =>
@@ -169,7 +169,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasName("UX_TransportationInfo_CompanyName");
 
-                    b.ToTable("TransportationInfos");
+                    b.ToTable("TransportationInfo");
                 });
 
             modelBuilder.Entity("Tour.Domain.Entities.Hotel", b =>

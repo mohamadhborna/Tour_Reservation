@@ -9,9 +9,11 @@ namespace Tour.Infrastructure.Data.Config
         public override void Configure(EntityTypeBuilder<City> builder)
         {
             base.Configure(builder);
+            
             builder.HasIndex(e => e.Title)
                 .IsUnique()
                 .HasName($"UX_{nameof(City)}_{nameof(City.Title)}");
+
             builder.Property (e => e.Title)
                 .IsRequired() 
                 .HasMaxLength(40);
