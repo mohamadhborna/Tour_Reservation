@@ -19,7 +19,10 @@ using Tour.Infrastructure;
 using Tour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
+using Tour.Domain.DTOs;
 using Tour.Domain.Interfaces.Repository.Core;
+using AutoMapper;
+
 
 namespace Api
 {
@@ -35,18 +38,24 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IRepository<City>, BaseRepository<City , PackageContext>>();
-            services.AddScoped<IRepository<HotelInfo>, BaseRepository<HotelInfo , PackageContext>>();
-            services.AddScoped<IRepository<TransportationInfo>, BaseRepository<TransportationInfo , PackageContext>>();
+            services.AddScoped<IRepository<City>, BaseRepository<City, PackageContext>>();
+            services.AddScoped<IRepository<HotelInfo>, BaseRepository<HotelInfo, PackageContext>>();
+            services.AddScoped<IRepository<TransportationInfo>, BaseRepository<TransportationInfo, PackageContext>>();
             services.AddScoped<IPackageRepository, PackageRepository>();
 
             services.AddScoped<IPackageService, PackageService>();
-            services.AddScoped<ICrudService<City>, CrudServiceBase<City , IRepository<City>>>();
-            services.AddScoped<ICrudService<HotelInfo>, CrudServiceBase<HotelInfo , IRepository<HotelInfo>>>();
-            services.AddScoped<ICrudService<TransportationInfo>, CrudServiceBase<TransportationInfo , IRepository<TransportationInfo>>>();
+            services.AddScoped<ICrudService<CityDto>, CrudServiceBase<City, CityDto, IRepository<City>>>();
+            services.AddScoped<ICrudService<HotelInfoDto>, CrudServiceBase<HotelInfo, HotelInfoDto, IRepository<HotelInfo>>>();
+            services.AddScoped<ICrudService<TransportationInfoDto>, CrudServiceBase<TransportationInfo, TransportationInfoDto, IRepository<TransportationInfo>>>();
+
+            services.AddScoped<IDtoMapper<Package, PackageDto> , DtoMapper<Package, PackageDto>>();
+            services.AddScoped<IDtoMapper<City, CityDto> , DtoMapper<City, CityDto>>();
+            services.AddScoped<IDtoMapper<TransportationInfo, TransportationInfoDto> , DtoMapper<TransportationInfo, TransportationInfoDto>>();
+            services.AddScoped<IDtoMapper<HotelInfo, HotelInfoDto> , DtoMapper<HotelInfo, HotelInfoDto>>();
 
             ConfigureInMemoryDatabase(services);
             ConfigureSwagger(services);
+            services.AddAutoMapper(typeof(Startup), typeof(AutoMapping) );
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -83,7 +92,8 @@ namespace Api
             // app.UseHttpsRedirection();
             app.UseMvc();
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger for Tour v1");
             });
         }

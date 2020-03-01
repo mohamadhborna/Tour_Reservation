@@ -4,5 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssmblyName>Tour.Domain</AssmblyName>
   </PropertyGroup>
-
 </Project>
