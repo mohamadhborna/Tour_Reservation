@@ -29,6 +29,7 @@ namespace Tour.Infrastructure.Data.Config
                 .HasForeignKey(e => e.DestinationCityId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(Package)}_{nameof(Package.DestinationCityId)}");
+                 
         }
     }
 }

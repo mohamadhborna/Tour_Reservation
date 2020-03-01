@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - IsUnique method for indexes.
 - Enumeration.
 - Extension method for repetitive configurations.
+- Entity configuration dynamiclly
 
 ### Changed
 

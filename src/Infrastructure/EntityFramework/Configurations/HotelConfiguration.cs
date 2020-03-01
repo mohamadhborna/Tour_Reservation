@@ -27,6 +27,7 @@ namespace Tour.Infrastructure.Data.Config
 
             builder.Property(e => e.Price)
                 .HasColumnType("decimal(6,1)");
+                 
         }
 
     }
