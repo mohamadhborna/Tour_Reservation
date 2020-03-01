@@ -28,25 +28,27 @@ namespace Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IRepository<City>, BaseRepository<City , PackageContext>>();
-            services.AddScoped<IRepository<HotelInfo>, BaseRepository<HotelInfo , PackageContext>>();
-            services.AddScoped<IRepository<TransportationInfo>, BaseRepository<TransportationInfo , PackageContext>>();
+            services.AddScoped<IRepository<City>, BaseRepository<City, PackageContext>>();
+            services.AddScoped<IRepository<HotelInfo>, BaseRepository<HotelInfo, PackageContext>>();
+            services.AddScoped<IRepository<TransportationInfo>, BaseRepository<TransportationInfo, PackageContext>>();
             services.AddScoped<IPackageRepository, PackageRepository>();
 
             services.AddScoped<IPackageService, PackageService>();
-            services.AddScoped<ICrudService<City>, CrudServiceBase<City , IRepository<City>>>();
-            services.AddScoped<ICrudService<HotelInfo>, CrudServiceBase<HotelInfo , IRepository<HotelInfo>>>();
-            services.AddScoped<ICrudService<TransportationInfo>, CrudServiceBase<TransportationInfo , IRepository<TransportationInfo>>>();
+            services.AddScoped<ICrudService<City>, CrudServiceBase<City, IRepository<City>>>();
+            services.AddScoped<ICrudService<HotelInfo>, CrudServiceBase<HotelInfo, IRepository<HotelInfo>>>();
+            services.AddScoped<ICrudService<TransportationInfo>, CrudServiceBase<TransportationInfo, IRepository<TransportationInfo>>>();
 
             // Uncomment the following line for development and test
             // ConfigureInMemoryDatabase(services);
@@ -75,18 +77,13 @@ namespace Api
 
         public void ConfigureSqlServer(IServiceCollection services)
         {
-            services.AddDbContext<PackageContext>(options => {
-                options.UseSqlServer(Configuration["ConnectionString:DefaultConnection"]);
-            });
-            services.AddDbContext<PackageContext>(options => {options.ConfigureWarnings(warnings => 
-                 warnings.Default(WarningBehavior.Ignore)
-                    .Log(CoreEventId.IncludeIgnoredWarning)
-                    .Throw(RelationalEventId.QueryClientEvaluationWarning));
-            });
-            services.AddDbContext<PackageContext>(options => {options.EnableDetailedErrors();});
-            services.AddDbContext<PackageContext>(options => {options.EnableSensitiveDataLogging();});
-            services.AddDbContext<PackageContext>(options => {options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);});
-            
+            services.AddDbContext<PackageContext>(options =>
+                options.UseSqlServer(Configuration["ConnectionString:DefaultConnection"], providerOptions => providerOptions.CommandTimeout(60))
+                        .EnableSensitiveDataLogging(Environment.IsDevelopment())
+                        .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
+                        .EnableDetailedErrors()
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,11 +100,12 @@ namespace Api
             }
 
             // app.UseHttpsRedirection();
-            app.UseMvc();
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger for Tour v1");
             });
+            app.UseMvc();
         }
     }
 }
