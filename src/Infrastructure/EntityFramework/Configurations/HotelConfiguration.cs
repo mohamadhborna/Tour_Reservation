@@ -21,8 +21,9 @@ namespace Tour.Infrastructure.Data.Config
                 .HasForeignKey(e => e.PackageId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(Hotel)}_{nameof(Hotel.PackageId)}");  
-
-
+                builder.Property(e => e.Price)
+                .HasColumnType("decimal(6,1)");
         }
+
     }
 }

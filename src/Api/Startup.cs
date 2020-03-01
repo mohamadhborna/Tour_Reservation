@@ -20,6 +20,9 @@ using Tour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
 using Tour.Domain.Interfaces.Repository.Core;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
+
 
 namespace Api
 {
@@ -45,7 +48,10 @@ namespace Api
             services.AddScoped<ICrudService<HotelInfo>, CrudServiceBase<HotelInfo , IRepository<HotelInfo>>>();
             services.AddScoped<ICrudService<TransportationInfo>, CrudServiceBase<TransportationInfo , IRepository<TransportationInfo>>>();
 
-            ConfigureInMemoryDatabase(services);
+            // Uncomment the following line for development and test
+            // ConfigureInMemoryDatabase(services);
+
+            ConfigureSqlServer(services);
             ConfigureSwagger(services);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -65,6 +71,22 @@ namespace Api
             {
                 options.UseInMemoryDatabase("tour");
             });
+        }
+
+        public void ConfigureSqlServer(IServiceCollection services)
+        {
+            services.AddDbContext<PackageContext>(options => {
+                options.UseSqlServer(Configuration["ConnectionString:DefaultConnection"]);
+            });
+            services.AddDbContext<PackageContext>(options => {options.ConfigureWarnings(warnings => 
+                 warnings.Default(WarningBehavior.Ignore)
+                    .Log(CoreEventId.IncludeIgnoredWarning)
+                    .Throw(RelationalEventId.QueryClientEvaluationWarning));
+            });
+            services.AddDbContext<PackageContext>(options => {options.EnableDetailedErrors();});
+            services.AddDbContext<PackageContext>(options => {options.EnableSensitiveDataLogging();});
+            services.AddDbContext<PackageContext>(options => {options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);});
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

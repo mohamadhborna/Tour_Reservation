@@ -1,6 +1,8 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tour.Infrastructure.Data.Config;
 
 namespace Tour.Infrastructure.Data
 {
@@ -14,6 +16,18 @@ namespace Tour.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new CityConfiguration());
+           
+            builder.ApplyConfiguration(new HotelInfoConfiguration());
+           
+            builder.ApplyConfiguration(new TransportationInfoConfiguration());
+            
+            builder.ApplyConfiguration(new PackageConfiguration());
+            
+            builder.ApplyConfiguration(new HotelConfiguration());
+        
+            builder.ApplyConfiguration(new TransportationConfiguration());
+         
         }
     }
 }
