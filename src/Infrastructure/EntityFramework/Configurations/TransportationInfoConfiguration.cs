@@ -9,12 +9,15 @@ namespace Tour.Infrastructure.Data.Config
         public override void Configure(EntityTypeBuilder<TransportationInfo> builder)
         {
             base.Configure(builder);
+            
             builder.Property(e => e.CompanyName)
                 .HasMaxLength(40)
                 .IsRequired();
+
             builder.HasIndex(e => e.CompanyName)
                 .IsUnique()
                 .HasName($"UX_{nameof(TransportationInfo)}_{nameof(TransportationInfo.CompanyName)}");
+
             builder.Property(e => e.Type)
                 .IsRequired();
 
