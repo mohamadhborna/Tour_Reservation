@@ -1,3 +1,4 @@
+using System.Reflection;
 using System;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
@@ -16,6 +17,7 @@ namespace Tour.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
             builder.ApplyConfiguration(new CityConfiguration());
            
             builder.ApplyConfiguration(new HotelInfoConfiguration());
@@ -27,7 +29,7 @@ namespace Tour.Infrastructure.Data
             builder.ApplyConfiguration(new HotelConfiguration());
         
             builder.ApplyConfiguration(new TransportationConfiguration());
-         
+            
         }
     }
 }
