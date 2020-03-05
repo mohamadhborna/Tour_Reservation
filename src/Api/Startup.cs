@@ -19,8 +19,11 @@ using Tour.Infrastructure;
 using Tour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
+using Tour.Domain.DTOs;
 using Tour.Domain.Interfaces.Repository.Core;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+
 
 
 
@@ -46,15 +49,20 @@ namespace Api
             services.AddScoped<IPackageRepository, PackageRepository>();
 
             services.AddScoped<IPackageService, PackageService>();
-            services.AddScoped<ICrudService<City>, CrudServiceBase<City, IRepository<City>>>();
-            services.AddScoped<ICrudService<HotelInfo>, CrudServiceBase<HotelInfo, IRepository<HotelInfo>>>();
-            services.AddScoped<ICrudService<TransportationInfo>, CrudServiceBase<TransportationInfo, IRepository<TransportationInfo>>>();
 
-            // Uncomment the following line for development and test
-            // ConfigureInMemoryDatabase(services);
+            services.AddScoped<ICrudService<CityDto>, CrudServiceBase<City, CityDto, IRepository<City>>>();
+            services.AddScoped<ICrudService<HotelInfoDto>, CrudServiceBase<HotelInfo, HotelInfoDto, IRepository<HotelInfo>>>();
+            services.AddScoped<ICrudService<TransportationInfoDto>, CrudServiceBase<TransportationInfo, TransportationInfoDto, IRepository<TransportationInfo>>>();
+
+            services.AddScoped<IDtoMapper<Package, PackageDto>, DtoMapper<Package, PackageDto>>();
+            services.AddScoped<IDtoMapper<City, CityDto>, DtoMapper<City, CityDto>>();
+            services.AddScoped<IDtoMapper<TransportationInfo, TransportationInfoDto>, DtoMapper<TransportationInfo, TransportationInfoDto>>();
+            services.AddScoped<IDtoMapper<HotelInfo, HotelInfoDto>, DtoMapper<HotelInfo, HotelInfoDto>>();
+
 
             ConfigureSqlServer(services);
             ConfigureSwagger(services);
+            services.AddAutoMapper(typeof(Startup), typeof(AutoMapping));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

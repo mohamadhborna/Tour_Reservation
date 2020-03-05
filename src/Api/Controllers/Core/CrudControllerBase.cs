@@ -3,14 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Tour.Domain.Interfaces.Service.Core;
 using Tour.Domain.Entities;
+using Tour.Domain.DTOs;
 
 namespace Tour.Api.Controllers.Core
 {
     [ApiController]
     [Route("/api/v1/[controller]")]
-    public class CrudControllerBase<TEntity, TService> : Controller
+    public class CrudControllerBase<TEntity, TDto, TService> : Controller
         where TEntity : EntityBase
-        where TService : ICrudService<TEntity>
+        where TDto : DtoBase
+        where TService : ICrudService<TDto>
     {
         private readonly TService _service;
 
@@ -22,14 +24,15 @@ namespace Tour.Api.Controllers.Core
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var cities = await _service.GetAllAsync();
-            return Ok(cities);
+            var entities = await _service.GetAllAsync();
+            // _mapper.Map<List<TDto>>(entities)
+            return Ok(entities);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(TEntity entityInfo)
+        public async Task<IActionResult> AddAsync(TDto dtoInfo)
         {
-            await _service.AddAsync(entityInfo);
+            await _service.AddAsync(dtoInfo);
             return Ok();
         }
 
@@ -48,9 +51,9 @@ namespace Tour.Api.Controllers.Core
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] TEntity package)
+        public async Task<IActionResult> UpdateAsync([FromBody] TDto dtoInfo)
         {
-            await _service.UpdateAsync(package);
+            await _service.UpdateAsync(dtoInfo);
             return Ok();
         }
     }

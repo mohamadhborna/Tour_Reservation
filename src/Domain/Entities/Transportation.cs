@@ -4,7 +4,6 @@ namespace Tour.Domain.Entities
 {
     public class Transportation : EntityBase
     {
-
         public long TransportationInfoId { get; set; }
         public long PackageId { get; set; }
         public TransportationInfo TransportationInformation { get; set; }

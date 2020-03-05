@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Tour.Domain.Interfaces.Service;
 using Tour.Domain.Entities;
+using Tour.Domain.DTOs;
 using Tour.Api.Controllers.Core;
 
 namespace Tour.Api.Controllers
 {
-    public class PackageController : CrudControllerBase<Package, IPackageService>
+    public class PackageController : CrudControllerBase<Package, PackageDto, IPackageService>
     {
         private readonly IPackageService _packageService;
 

@@ -1,14 +1,15 @@
-using Tour.Domain.Entities;
+using Tour.Domain.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace Tour.Domain.Interfaces.Service.Core
 {
-    public interface ICrudService<TEntity> where TEntity : EntityBase
+    public interface ICrudService<TDto> 
+    where TDto : DtoBase
     {
-        Task AddAsync(TEntity e);
-        Task UpdateAsync(TEntity e);
-        Task<TEntity> DeleteAsync(long id);
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task AddAsync(TDto e);
+        Task UpdateAsync(TDto e);
+        Task<TDto> DeleteAsync(long id);
+        Task<IEnumerable<TDto>> GetAllAsync();
     }
 }
