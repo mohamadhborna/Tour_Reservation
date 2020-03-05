@@ -1,3 +1,4 @@
+using System;
 using Tour.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,6 +18,7 @@ namespace Tour.Infrastructure.Data.Config
             builder.Property (e => e.Title)
                 .IsRequired() 
                 .HasMaxLength(40);
+                Console.WriteLine("#################---------------------------------->City configuration Applied");
         }
     }
 }

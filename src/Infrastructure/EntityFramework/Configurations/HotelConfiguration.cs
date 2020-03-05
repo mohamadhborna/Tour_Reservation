@@ -1,3 +1,4 @@
+using System;
 using Tour.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -27,7 +28,7 @@ namespace Tour.Infrastructure.Data.Config
 
             builder.Property(e => e.Price)
                 .HasColumnType("decimal(6,1)");
-                 
+             Console.WriteLine("#################---------------------------------->Hotel configuration Applied");    
         }
 
     }
