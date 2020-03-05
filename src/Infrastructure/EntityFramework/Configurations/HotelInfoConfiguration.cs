@@ -22,12 +22,13 @@ namespace Tour.Infrastructure.Data.Config
             builder.Property(e => e.Stars)
                 .HasDefaultValue(0)
                 .IsRequired();
-
+                
             builder.HasOne(e => e.City)
                 .WithMany()
                 .HasForeignKey(e => e.CityId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(HotelInfo)}_{nameof(HotelInfo.CityId)}");    
+
                 
             builder.HasIndex(e => e.Title)
                 .IsUnique()

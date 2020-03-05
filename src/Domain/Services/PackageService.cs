@@ -4,7 +4,6 @@ using Tour.Domain.Interfaces;
 using Tour.Domain.Interfaces.Service;
 using Tour.Domain.Entities;
 using Tour.Domain.DTOs;
-using AutoMapper;
 
 namespace Tour.Domain.Services
 {

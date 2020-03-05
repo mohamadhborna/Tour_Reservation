@@ -5,7 +5,6 @@ using Tour.Domain.Entities;
 using Tour.Domain.DTOs;
 using Tour.Domain.Interfaces.Repository.Core;
 using Tour.Domain.Interfaces;
-using AutoMapper;
 
 namespace Tour.Domain.Services
 {

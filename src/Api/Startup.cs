@@ -22,18 +22,23 @@ using Tour.Domain.Entities;
 using Tour.Domain.DTOs;
 using Tour.Domain.Interfaces.Repository.Core;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
+
 
 
 namespace Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -44,18 +49,20 @@ namespace Api
             services.AddScoped<IPackageRepository, PackageRepository>();
 
             services.AddScoped<IPackageService, PackageService>();
+
             services.AddScoped<ICrudService<CityDto>, CrudServiceBase<City, CityDto, IRepository<City>>>();
             services.AddScoped<ICrudService<HotelInfoDto>, CrudServiceBase<HotelInfo, HotelInfoDto, IRepository<HotelInfo>>>();
             services.AddScoped<ICrudService<TransportationInfoDto>, CrudServiceBase<TransportationInfo, TransportationInfoDto, IRepository<TransportationInfo>>>();
 
-            services.AddScoped<IDtoMapper<Package, PackageDto> , DtoMapper<Package, PackageDto>>();
-            services.AddScoped<IDtoMapper<City, CityDto> , DtoMapper<City, CityDto>>();
-            services.AddScoped<IDtoMapper<TransportationInfo, TransportationInfoDto> , DtoMapper<TransportationInfo, TransportationInfoDto>>();
-            services.AddScoped<IDtoMapper<HotelInfo, HotelInfoDto> , DtoMapper<HotelInfo, HotelInfoDto>>();
+            services.AddScoped<IDtoMapper<Package, PackageDto>, DtoMapper<Package, PackageDto>>();
+            services.AddScoped<IDtoMapper<City, CityDto>, DtoMapper<City, CityDto>>();
+            services.AddScoped<IDtoMapper<TransportationInfo, TransportationInfoDto>, DtoMapper<TransportationInfo, TransportationInfoDto>>();
+            services.AddScoped<IDtoMapper<HotelInfo, HotelInfoDto>, DtoMapper<HotelInfo, HotelInfoDto>>();
 
-            ConfigureInMemoryDatabase(services);
+
+            ConfigureSqlServer(services);
             ConfigureSwagger(services);
-            services.AddAutoMapper(typeof(Startup), typeof(AutoMapping) );
+            services.AddAutoMapper(typeof(Startup), typeof(AutoMapping));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -76,6 +83,17 @@ namespace Api
             });
         }
 
+        public void ConfigureSqlServer(IServiceCollection services)
+        {
+            services.AddDbContext<PackageContext>(options =>
+                options.UseSqlServer(Configuration["ConnectionString:DefaultConnection"], providerOptions => providerOptions.CommandTimeout(60))
+                        .EnableSensitiveDataLogging(Environment.IsDevelopment())
+                        .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
+                        .EnableDetailedErrors()
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll));
+
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -90,12 +108,12 @@ namespace Api
             }
 
             // app.UseHttpsRedirection();
-            app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger for Tour v1");
             });
+            app.UseMvc();
         }
     }
 }
