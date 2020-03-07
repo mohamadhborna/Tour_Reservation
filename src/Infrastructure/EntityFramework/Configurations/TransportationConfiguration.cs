@@ -1,4 +1,3 @@
-using System;
 using Tour.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -28,7 +27,7 @@ namespace Tour.Infrastructure.Data.Config
 
             builder.Property(e => e.ToDate)
                 .IsRequired();
-             Console.WriteLine("#################---------------------------------->Transportation configuration Applied");   
+
         }
     }
 }

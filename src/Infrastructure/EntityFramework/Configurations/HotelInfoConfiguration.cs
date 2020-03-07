@@ -1,4 +1,3 @@
-using System;
 using Tour.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -26,8 +25,7 @@ namespace Tour.Infrastructure.Data.Config
                 
             builder.HasIndex(e => e.Title)
                 .IsUnique()
-                .HasName($"UX_{nameof(HotelInfo)}_{nameof(HotelInfo.Title)}");
-            Console.WriteLine("#################---------------------------------->Hotel info configuration Applied"); 
+                .HasName($"UX_{nameof(HotelInfo)}_{nameof(HotelInfo.Title)}"); 
         }
     }
 }

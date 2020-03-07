@@ -1,4 +1,3 @@
-using System;
 using Tour.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -27,9 +26,7 @@ namespace Tour.Infrastructure.Data.Config
                 .HasConstraintName($"FK_{nameof(Hotel)}_{nameof(Hotel.PackageId)}");
 
             builder.Property(e => e.Price)
-                .HasColumnType("decimal(6,1)");
-             Console.WriteLine("#################---------------------------------->Hotel configuration Applied");    
+                .HasColumnType("decimal(6,1)");    
         }
-
     }
 }

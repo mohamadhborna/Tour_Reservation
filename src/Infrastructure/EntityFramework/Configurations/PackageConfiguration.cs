@@ -1,4 +1,3 @@
-using System;
 using Tour.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -29,8 +28,7 @@ namespace Tour.Infrastructure.Data.Config
                 .WithMany()
                 .HasForeignKey(e => e.DestinationCityId)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName($"FK_{nameof(Package)}_{nameof(Package.DestinationCityId)}");
-            Console.WriteLine("#################---------------------------------->Package configuration Applied");     
+                .HasConstraintName($"FK_{nameof(Package)}_{nameof(Package.DestinationCityId)}");     
         }
     }
 }
