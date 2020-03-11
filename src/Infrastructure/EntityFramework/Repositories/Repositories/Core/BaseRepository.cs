@@ -10,7 +10,7 @@ namespace Tour.Infrastructure.Data
         where TEntity : EntityBase
         where TContext : DbContext
     {
-        private readonly TContext _context;
+        protected readonly TContext _context;
 
         public BaseRepository(TContext context)
         {

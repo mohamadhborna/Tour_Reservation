@@ -4,6 +4,8 @@ using Tour.Domain.Interfaces;
 using Tour.Domain.Interfaces.Service;
 using Tour.Domain.Entities;
 using Tour.Domain.DTOs;
+using System.Linq;
+using System;
 
 namespace Tour.Domain.Services
 {
@@ -40,6 +42,43 @@ namespace Tour.Domain.Services
         {
             return  _mapper.SingleEntityToDto(await _packageRepository.DeleteAsync(id));
             // return _mapper.Map<PackageDto>(await _packageRepository.DeleteAsync(id));
+        }
+
+        public IEnumerable<PackageDto> Search(PackageSearch packageSearch)
+        {
+            var entities = _packageRepository.GetEntitiesAsIQueryable();
+
+            if (packageSearch.OriginCityId != 0){
+                entities = entities.Where(e => e.OriginCityId == packageSearch.OriginCityId);
+            }
+
+            if (packageSearch.DestinationCityId != 0) {
+                entities = entities.Where(e => e.DestinationCityId == packageSearch.DestinationCityId);
+            }
+            
+            if (!packageSearch.FromDate.Equals(default(DateTime)))
+            {
+                entities = entities.Where(e => e.StartDate >= packageSearch.FromDate);
+            }
+
+            if (!packageSearch.ToDate.Equals(default(DateTime)))
+            {
+                entities = entities.Where(e => e.EndDate <= packageSearch.ToDate);
+            }
+
+            IEnumerable<Package> listOfPackages = entities.ToList();
+
+            if (packageSearch.Hotels.Count != 0)
+            {
+                listOfPackages = listOfPackages.Where(e => e.Hotels.Intersect(packageSearch.Hotels).Any());
+            }
+
+            if (packageSearch.Transportations.Count != 0)
+            {
+                listOfPackages = listOfPackages.Where(e => e.Transportations.Intersect(packageSearch.Transportations).Any());
+            }
+            
+            return _mapper.ListOfEntityToDto(listOfPackages.ToList());
         }
     }
 }
