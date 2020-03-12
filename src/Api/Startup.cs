@@ -23,6 +23,7 @@ using Tour.Domain.DTOs;
 using Tour.Domain.Interfaces.Repository.Core;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Tour.Api.Filters;
 
 
 
@@ -65,6 +66,11 @@ namespace Api
             services.AddAutoMapper(typeof(Startup), typeof(AutoMapping));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(GlobalExceptionFilter));         
+            });
         }
 
         public void ConfigureSwagger(IServiceCollection services)
