@@ -20,8 +20,6 @@ namespace Tour.Infrastructure.Data.Config
 
             builder.Property(e => e.Type)
                 .IsRequired();
-
-            
         }
     }
 }

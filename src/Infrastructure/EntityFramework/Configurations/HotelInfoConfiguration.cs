@@ -32,7 +32,7 @@ namespace Tour.Infrastructure.Data.Config
                 
             builder.HasIndex(e => e.Title)
                 .IsUnique()
-                .HasName($"UX_{nameof(HotelInfo)}_{nameof(HotelInfo.Title)}");
+                .HasName($"UX_{nameof(HotelInfo)}_{nameof(HotelInfo.Title)}"); 
         }
     }
 }

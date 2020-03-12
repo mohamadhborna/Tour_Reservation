@@ -26,8 +26,7 @@ namespace Tour.Infrastructure.Data.Config
                 .HasConstraintName($"FK_{nameof(Hotel)}_{nameof(Hotel.PackageId)}");
 
             builder.Property(e => e.Price)
-                .HasColumnType("decimal(6,1)");
+                .HasColumnType("decimal(6,1)");    
         }
-
     }
 }

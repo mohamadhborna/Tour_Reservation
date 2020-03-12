@@ -18,17 +18,7 @@ namespace Tour.Infrastructure.Data
         {
             base.OnModelCreating(builder);
             
-            builder.ApplyConfiguration(new CityConfiguration());
-           
-            builder.ApplyConfiguration(new HotelInfoConfiguration());
-           
-            builder.ApplyConfiguration(new TransportationInfoConfiguration());
-            
-            builder.ApplyConfiguration(new PackageConfiguration());
-            
-            builder.ApplyConfiguration(new HotelConfiguration());
-        
-            builder.ApplyConfiguration(new TransportationConfiguration());
+            builder.ApplyConfigurationsFromAssembly(typeof(BaseConfiguration<EntityBase>).Assembly);
             
         }
     }

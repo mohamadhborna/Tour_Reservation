@@ -27,6 +27,7 @@ namespace Tour.Infrastructure.Data.Config
 
             builder.Property(e => e.ToDate)
                 .IsRequired();
+
         }
     }
 }
