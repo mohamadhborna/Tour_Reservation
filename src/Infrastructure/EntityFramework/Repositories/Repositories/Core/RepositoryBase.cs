@@ -5,7 +5,7 @@ using Tour.Domain.Interfaces.Repository.Core;
 
 namespace Tour.Infrastructure.Data
 {
-    public class RepositoryBase<TEntity, TDbContext> : ReadOnlyRepositoryBase<TEntity, TDbContext>, IRepository<TEntity>
+    internal class RepositoryBase<TEntity, TDbContext> : ReadOnlyRepositoryBase<TEntity, TDbContext>, IRepository<TEntity>
         where TEntity : EntityBase
         where TDbContext : DbContext
     {
