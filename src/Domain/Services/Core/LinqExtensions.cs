@@ -5,7 +5,7 @@ using Tour.Domain.Core;
 
 namespace Tour.Domain.Extensions
 {
-    public static class LinqExtensions
+    internal static class LinqExtensions
     {
 
         public static IQueryable<TEntity> ApplyPaging<TEntity>(this IQueryable<TEntity> query, IPagingFilterOptions options, Expression<Func<TEntity, object>> sortSelector)

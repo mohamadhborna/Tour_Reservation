@@ -8,7 +8,7 @@ using Tour.Domain.Extensions;
 
 namespace Tour.Domain.Services
 {
-    public class PackageService : CrudServiceBase<Package, PackageDto, PackageSearchModel, IRepository<Package>>, IPackageService
+    internal class PackageService : CrudServiceBase<Package, PackageDto, PackageSearchModel, IRepository<Package>>, IPackageService
     {
         public PackageService(IRepository<Package> packageRepository, IObjectMapper mapper) : base(packageRepository, mapper)
         {

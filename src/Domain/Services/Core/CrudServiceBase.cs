@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tour.Domain.Services
 {
-    public class CrudServiceBase<TEntity, TEntityDto, TRepository> : ICrudService<TEntityDto>
+    internal class CrudServiceBase<TEntity, TEntityDto, TRepository> : ICrudService<TEntityDto>
         where TEntity : EntityBase
         where TEntityDto : EntityDtoBase
         where TRepository : IRepository<TEntity>
@@ -67,7 +67,7 @@ namespace Tour.Domain.Services
 
     }
 
-    public class CrudServiceBase<TEntity, TEntityDto, TSearchModel, TRepository> : CrudServiceBase<TEntity, TEntityDto, TRepository>
+    internal class CrudServiceBase<TEntity, TEntityDto, TSearchModel, TRepository> : CrudServiceBase<TEntity, TEntityDto, TRepository>
         where TEntity : EntityBase
         where TEntityDto : EntityDtoBase
         where TSearchModel : IPagingFilterOptions

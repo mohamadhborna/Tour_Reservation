@@ -10,7 +10,7 @@ using Tour.Infrastructure.Extensions;
 
 namespace Tour.Infrastructure.Data
 {
-    public class ReadOnlyRepositoryBase<TEntity, TDbContext> : IReadOnlyRepository<TEntity>
+    internal class ReadOnlyRepositoryBase<TEntity, TDbContext> : IReadOnlyRepository<TEntity>
         where TEntity : EntityBase
         where TDbContext : DbContext
     {

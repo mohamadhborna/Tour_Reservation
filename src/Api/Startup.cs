@@ -4,19 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tour.Domain.Interfaces;
-using Tour.Domain.Interfaces.Service;
-using Tour.Domain.Interfaces.Service.Core;
-using Tour.Domain.Services;
-using Tour.Infrastructure;
 using Tour.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Tour.Domain.Entities;
-using Tour.Domain.DTOs;
-using Tour.Domain.Interfaces.Repository.Core;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Tour.Api.Filters;
-using AutoMapper;
 
 namespace Api
 {
@@ -34,21 +25,9 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IRepository<City>, RepositoryBase<City, PackageContext>>();
-            services.AddScoped<IRepository<HotelInfo>, RepositoryBase<HotelInfo, PackageContext>>();
-            services.AddScoped<IRepository<TransportationInfo>, RepositoryBase<TransportationInfo, PackageContext>>();
-
-            services.AddScoped<IPackageService, PackageService>();
-
-            services.AddScoped<ICrudService<CityDto>, CrudServiceBase<City, CityDto, IRepository<City>>>();
-            services.AddScoped<ICrudService<HotelInfoDto>, CrudServiceBase<HotelInfo, HotelInfoDto, IRepository<HotelInfo>>>();
-            services.AddScoped<ICrudService<TransportationInfoDto>, CrudServiceBase<TransportationInfo, TransportationInfoDto, IRepository<TransportationInfo>>>();
-
-            services.AddScoped<Tour.Domain.Interfaces.IObjectMapper, DefaultObjectMapper>();
 
             ConfigureSqlServer(services);
             ConfigureSwagger(services);
-            services.AddAutoMapper(typeof(Startup), typeof(MappingProfile));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
