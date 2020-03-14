@@ -1,19 +1,19 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Tour.Domain.Entities;
 using Tour.Domain.DTOs;
 
 namespace Tour.Infrastructure
 {
-    public class AutoMapping : Profile
+    public class MappingProfile : Profile
     {
-        public AutoMapping()
+        public MappingProfile()
         {
             CreateMap<City, CityDto>();
             CreateMap<HotelInfo, HotelInfoDto>();
             CreateMap<TransportationInfo, TransportationInfoDto>();
             CreateMap<Package, PackageDto>();
-            
-        
+
+
 
             CreateMap<CityDto, City>();
             CreateMap<HotelInfoDto, HotelInfo>();

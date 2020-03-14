@@ -9,10 +9,10 @@ namespace Tour.Api.Controllers.Core
 {
     [ApiController]
     [Route("/api/v1/[controller]")]
-    public class CrudControllerBase<TEntity, TDto, TService> : Controller
+    public class CrudControllerBase<TEntity, TEntityDto, TService> : Controller
         where TEntity : EntityBase
-        where TDto : DtoBase
-        where TService : ICrudService<TDto>
+        where TEntityDto : EntityDtoBase
+        where TService : ICrudService<TEntityDto>
     {
         private readonly TService _service;
 
@@ -24,37 +24,26 @@ namespace Tour.Api.Controllers.Core
         [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var entities = await _service.GetAllAsync();
-            // _mapper.Map<List<TDto>>(entities)
-            return Ok(entities);
+            return Ok(await _service.GetAllAsync());
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(TDto dtoInfo)
+        public async Task<IActionResult> PostAsync(TEntityDto entityDto)
         {
-            await _service.AddAsync(dtoInfo);
+            if (entityDto.Id == default)
+                await _service.AddAsync(entityDto);
+            else
+                await _service.UpdateAsync(entityDto);
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var deletedCity = await _service.DeleteAsync(id);
-
-            if (deletedCity == null)
-            {
-                return NotFound();
-            }
+            await _service.DeleteAsync(id);
 
             return NoContent();
-        }
-
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] TDto dtoInfo)
-        {
-            await _service.UpdateAsync(dtoInfo);
-            return Ok();
         }
     }
 }

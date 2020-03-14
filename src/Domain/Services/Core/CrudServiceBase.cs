@@ -5,47 +5,88 @@ using Tour.Domain.Entities;
 using Tour.Domain.DTOs;
 using Tour.Domain.Interfaces.Repository.Core;
 using Tour.Domain.Interfaces;
+using Tour.Domain.Core;
+using System.Linq;
 
 namespace Tour.Domain.Services
 {
-    public class CrudServiceBase<TEntity, TDto, TRepository> : ICrudService<TDto>
-    where TEntity : EntityBase
-    where TDto : DtoBase
-    where TRepository : IRepository<TEntity>
+    public class CrudServiceBase<TEntity, TEntityDto, TRepository> : ICrudService<TEntityDto>
+        where TEntity : EntityBase
+        where TEntityDto : EntityDtoBase
+        where TRepository : IRepository<TEntity>
     {
-        private readonly TRepository _repository;
-        private readonly IDtoMapper<TEntity, TDto> _mapper;
+        protected readonly TRepository _repository;
+        protected readonly IObjectMapper _mapper;
 
-        public CrudServiceBase(TRepository repository, IDtoMapper<TEntity, TDto> mapper)
+        public CrudServiceBase(TRepository repository, IObjectMapper mapper)
         {
             _repository = repository;
-            _mapper = mapper; 
+            _mapper = mapper;
         }
 
-        // Add service methods you need in other classes
-        public async Task AddAsync(TDto e)
+        public async Task<IEnumerable<TEntityDto>> GetAllAsync()
         {
-
-            await _repository.AddAsync(_mapper.SingleDtoToEntity(e));
-            // await _repository.AddAsync(_mapper.Map<TEntity>(e));
+            return _mapper.Map<IEnumerable<TEntityDto>>(await _repository.GetAllAsync());
         }
 
-        public async Task<IEnumerable<TDto>> GetAllAsync()
+        public async Task<TEntityDto> AddAsync(TEntityDto entityDto)
         {
-            return _mapper.ListOfEntityToDto(await _repository.GetAllAsync());
-            // return _mapper.Map<List<TDto>>(await _repository.GetAllAsync());
+            return _mapper.Map<TEntityDto>(await OnAdd(entityDto));
         }
 
-        public async Task UpdateAsync(TDto e)
+
+        public async Task<TEntityDto> UpdateAsync(TEntityDto entityDto)
         {
-            await _repository.UpdateAsync(_mapper.SingleDtoToEntity(e));
-            // await _repository.UpdateAsync(_mapper.Map<TEntity>(e));
+            return _mapper.Map<TEntityDto>(await _repository.UpdateAsync(_mapper.Map<TEntity>(entityDto)));
         }
 
-        public async Task<TDto> DeleteAsync(long id)
-        { 
-            return  _mapper.SingleEntityToDto(await _repository.DeleteAsync(id)); 
-            // return  _mapper.Map<TDto>(await _repository.DeleteAsync(id));
+        public async Task DeleteAsync(long id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+
+            if (entity == null)
+                throw new System.Exception($"Entity {typeof(TEntity).Name} With Id {id} Not Found.");
+
+            await OnDelete(entity);
+        }
+
+        protected virtual Task<TEntity> OnAdd(TEntityDto entityDto)
+        {
+            return _repository.AddAsync(_mapper.Map<TEntity>(entityDto));
+        }
+
+        protected virtual Task<TEntity> OnUpdate(TEntityDto entityDto)
+        {
+            return _repository.UpdateAsync(_mapper.Map<TEntity>(entityDto));
+        }
+
+        protected virtual Task OnDelete(TEntity entity)
+        {
+            return _repository.DeleteAsync(entity);
+        }
+
+    }
+
+    public class CrudServiceBase<TEntity, TEntityDto, TSearchModel, TRepository> : CrudServiceBase<TEntity, TEntityDto, TRepository>
+        where TEntity : EntityBase
+        where TEntityDto : EntityDtoBase
+        where TSearchModel : IPagingFilterOptions
+        where TRepository : IRepository<TEntity>
+    {
+        public CrudServiceBase(TRepository repository, IObjectMapper mapper) : base(repository, mapper)
+        {
+        }
+
+        public IEnumerable<TEntityDto> Search(TSearchModel searchModel)
+        {
+            var query = OnApplyExplicitFilter(_repository.QueryNoTracking(), searchModel);
+
+            return _mapper.Map<IEnumerable<TEntityDto>>(query.ToList());
+        }
+
+        protected virtual IQueryable<TEntity> OnApplyExplicitFilter(IQueryable<TEntity> query, TSearchModel searchModel)
+        {
+            return query;
         }
     }
 }

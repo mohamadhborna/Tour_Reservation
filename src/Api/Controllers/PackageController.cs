@@ -18,9 +18,10 @@ namespace Tour.Api.Controllers
         }
 
         [HttpGet("search")]
-        public IActionResult Search([FromBody]PackageSearch packageSearch)
+        public IActionResult Search([FromBody] PackageSearchModel packageSearch)
         {
             var entities = _packageService.Search(packageSearch);
+
             return Ok(entities);
         }
 

@@ -1,14 +1,13 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tour.Domain.Entities;
 
 namespace Tour.Domain.Interfaces.Repository.Core
 {
-    public interface IRepository<T> where T : EntityBase
+    public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>
+         where TEntity : EntityBase
     {
-        Task AddAsync(T entity);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task UpdateAsync(T entity);
-        Task<T> DeleteAsync(long id);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> UpdateAsync(TEntity entity);
+        Task DeleteAsync(TEntity entity);
     }
 }

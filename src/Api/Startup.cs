@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Tour.Domain.Interfaces;
 using Tour.Domain.Interfaces.Service;
 using Tour.Domain.Interfaces.Service.Core;
@@ -21,12 +14,9 @@ using Microsoft.EntityFrameworkCore;
 using Tour.Domain.Entities;
 using Tour.Domain.DTOs;
 using Tour.Domain.Interfaces.Repository.Core;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Tour.Api.Filters;
-
-
-
+using AutoMapper;
 
 namespace Api
 {
@@ -44,10 +34,9 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IRepository<City>, BaseRepository<City, PackageContext>>();
-            services.AddScoped<IRepository<HotelInfo>, BaseRepository<HotelInfo, PackageContext>>();
-            services.AddScoped<IRepository<TransportationInfo>, BaseRepository<TransportationInfo, PackageContext>>();
-            services.AddScoped<IPackageRepository, PackageRepository>();
+            services.AddScoped<IRepository<City>, RepositoryBase<City, PackageContext>>();
+            services.AddScoped<IRepository<HotelInfo>, RepositoryBase<HotelInfo, PackageContext>>();
+            services.AddScoped<IRepository<TransportationInfo>, RepositoryBase<TransportationInfo, PackageContext>>();
 
             services.AddScoped<IPackageService, PackageService>();
 
@@ -55,21 +44,17 @@ namespace Api
             services.AddScoped<ICrudService<HotelInfoDto>, CrudServiceBase<HotelInfo, HotelInfoDto, IRepository<HotelInfo>>>();
             services.AddScoped<ICrudService<TransportationInfoDto>, CrudServiceBase<TransportationInfo, TransportationInfoDto, IRepository<TransportationInfo>>>();
 
-            services.AddScoped<IDtoMapper<Package, PackageDto>, DtoMapper<Package, PackageDto>>();
-            services.AddScoped<IDtoMapper<City, CityDto>, DtoMapper<City, CityDto>>();
-            services.AddScoped<IDtoMapper<TransportationInfo, TransportationInfoDto>, DtoMapper<TransportationInfo, TransportationInfoDto>>();
-            services.AddScoped<IDtoMapper<HotelInfo, HotelInfoDto>, DtoMapper<HotelInfo, HotelInfoDto>>();
-
+            services.AddScoped<Tour.Domain.Interfaces.IObjectMapper, DefaultObjectMapper>();
 
             ConfigureSqlServer(services);
             ConfigureSwagger(services);
-            services.AddAutoMapper(typeof(Startup), typeof(AutoMapping));
+            services.AddAutoMapper(typeof(Startup), typeof(MappingProfile));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMvc(options =>
             {
-                options.Filters.Add(typeof(GlobalExceptionFilter));         
+                options.Filters.Add(typeof(GlobalExceptionFilter));
             });
         }
 

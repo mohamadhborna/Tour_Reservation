@@ -5,7 +5,7 @@ using Tour.Domain.Entities;
 
 namespace Tour.Domain.DTOs
 {
-    public class PackageDto : DtoBase, IAggregateRoot
+    public class PackageDto : EntityDtoBase, IAggregateRoot
     {
         public string Title { get; set; }
         public long OriginCityId { get; set; }

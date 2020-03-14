@@ -2,7 +2,7 @@ using Tour.Domain.Interfaces;
 
 namespace Tour.Domain.DTOs
 {
-    public class HotelInfoDto : DtoBase
+    public class HotelInfoDto : EntityDtoBase
     {
         public string Title { get; set; }
         public int Stars { get; set; }
